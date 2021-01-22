@@ -1,0 +1,25 @@
+{
+    "name": "nwidart/select2handler",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\\Select2Handler\\Providers\\Select2HandlerServiceProvider"
+            ],
+            "aliases": {
+                
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\Select2Handler\\": ""
+        }
+    }
+}

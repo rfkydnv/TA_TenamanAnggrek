@@ -1,0 +1,72 @@
+@extends('template.layout')
+
+@section('app_title',env('APP_NAME'))
+
+@section('module_title',$module_title)
+
+@section('container')
+<div class="kt-portlet kt-portlet--mobile" data-display="1" id="element" >
+	<div class="kt-portlet__head kt-portlet__head--lg">
+		<div class="kt-portlet__head-label">
+			<span class="kt-portlet__head-icon">
+				<i class="kt-font-brand flaticon2-line-chart"></i>
+			</span>
+			<h3 class="kt-portlet__head-title">
+				{{$module_title}}
+			</h3>
+		</div>
+		<div class="kt-portlet__head-toolbar">
+			<div class="kt-portlet__head-wrapper">
+				<div class="kt-portlet__head-actions">
+					<a id="find" class="btn btn-default btn-outline-primary btn-sm" title="Search Data">Find</a>
+					<a class="btn btn-icon-only btn-default btn-outline-primary fullscreen la la-expand" data-original-title="" title="aktifkan mode tampilan layar penuh"></a>
+					<a class="btn btn-icon-only btn-default btn-outline-primary reload la la-rotate-right" data-original-title="" title="Reload Data"></a>
+					<a href="{{ route('jabatan.create') }}" class="btn btn-brand btn-elevate btn-icon-sm la la-plus" >
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="kt-portlet__body">
+
+		<!--begin: Datatable -->
+		<div class="table-responsive">
+			<table class="table table-striped-table-bordered table-hover table-checkable dataTable" id="kt_table_1">
+				<thead>
+					<tr>
+						<th>No</th>
+						<th>Nama Jabatan</th>
+						<th>Keterangan</th>
+						<th width=15% >Actions</th>
+					</tr>
+					
+				</thead>
+			</table>
+		</div>
+	</div>
+
+</div>
+
+@stop
+
+@section("script")
+<script>
+		KTUtil.ready(function() {
+            document.addEventListener("turbolinks:click", function() {
+                App.blockUI();
+            })
+			var url = "{{ route('jabatan.get') }}";
+			var targetRender = {
+				'0':{'type' : '', 'orderable': false },
+				'-1':{'type' : 'actions','orderable': false}
+			};
+			var filter = {
+				'Nama Jabatan':{'name':'jabatan_nama','type':'text','id':'jabatan_nama'}
+			};
+			var order   = [[0, "desc"]];
+			CoreDataTables.init(url,targetRender,filter,order);
+		}); 
+		
+	
+	</script>
+@stop

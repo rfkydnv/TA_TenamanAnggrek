@@ -1,0 +1,14 @@
+{
+    "name": "Mahasiswa",
+    "alias": "mahasiswa",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Mahasiswa\\Providers\\MahasiswaServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

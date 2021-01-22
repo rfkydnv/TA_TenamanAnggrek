@@ -1,0 +1,14 @@
+{
+    "name": "Select2Handler",
+    "alias": "select2handler",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Select2Handler\\Providers\\Select2HandlerServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}

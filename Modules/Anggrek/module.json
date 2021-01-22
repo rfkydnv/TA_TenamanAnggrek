@@ -1,0 +1,14 @@
+{
+    "name": "Anggrek",
+    "alias": "anggrek",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Anggrek\\Providers\\AnggrekServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
