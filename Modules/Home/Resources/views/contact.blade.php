@@ -169,8 +169,8 @@ https://templatemo.com/tm-552-video-catalog
                     <div class="p-5 tm-bg-gray ">
                         <h3 class="tm-text-primary mb-4">Our Media Social</h3>
                         <ul class="list-unstyled tm-footer-links">
-                            <li><a href="#">Facebook</a></li>
-                            <li><a href="#">Instagram</a></li>
+                            <li><img src="pictures/fb.png" height='30px' width='30px'><a href="#"> Facebook</a></li>
+                            <li><img src="pictures/ig.png" height='30px' width='30px'><a href="#"> Instagram</a></li>
                         </ul>
                     </div>                        
                 </div>
