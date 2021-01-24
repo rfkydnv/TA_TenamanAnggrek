@@ -4,6 +4,7 @@ namespace Modules\Home\Http\Controllers;
 
 use App\Helpers\AppResponse;
 use App\Http\Controllers\Controller;
+// use App\Komentar as AppKomentar;
 use App\Models\Artikel;
 use App\Models\Komentar;
 use Illuminate\Support\Facades\DB;

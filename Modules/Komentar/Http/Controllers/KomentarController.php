@@ -1,29 +1,25 @@
 <?php
 
-namespace Modules\Artikel\Http\Controllers;
+namespace Modules\Komentar\Http\Controllers;
 
 
 use App\Http\Controllers\Controller;
 use App\Helpers\AppGranted;
 use App\Helpers\AppResponse;
+use App\Models\Komentar;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
-use App\Models\Artikel;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Auth;
-use Intervention\Image\Facades\Image;
-use Illuminate\Support\Facades\Hash;
-
 // use App\Models\Model;
 
-class ArtikelController extends Controller
+class KomentarController extends Controller
 {
     protected $except = [];
 
     protected $moduleParent = "Master Data";
-    protected $moduleTitle = "Artikel";
-    protected $moduleUrl = "artikel";
+    protected $moduleTitle = "Komentar";
+    protected $moduleUrl = "komentar";
 
     /**
      * Display a listing of the resource.
@@ -37,7 +33,7 @@ class ArtikelController extends Controller
             ['title' => $this->moduleTitle,'url' => $this->moduleUrl]
         ];
 
-        return view("artikel::artikel", $data);
+        return view("komentar::komentar", $data);
     }
 
     /**
@@ -53,31 +49,29 @@ class ArtikelController extends Controller
             ['title' => $this->moduleTitle,'url' => $this->moduleUrl."/create"]
         ];
 
-        $data['action'] = route('artikel.store');
+        $data['action'] = route('komentar.store');
         $data['action_type'] = "add";
-        $data['redirect'] = route("artikel.index");
-        $data['data'] = json_encode(['karyawan_nik' => app_generate_nik()]);
-        return view("artikel::artikel_form", $data);
+        $data['redirect'] = route("komentar.index");
+
+        return view("komentar::create", $data);
     }
 
     public function get(Request $request)
     {
-      $getData = DB::table('artikel')
-      ->whereNull('artikel_deleted_at');
+      $getData = DB::table('komentar')
+      ->whereNull('komentar_deleted_at');
       $getData->offset($request->start)->limit($request->length);
       
       // filter
-      if ($request->filled("judul")) {
-          $getData->where("artikel_judul", "like", "%{$request->judul}%");
-      }
-      // if ($request->filled("sampul")) {
-      //     $getData->where("kantor_tipe", "like", "%{$request->tipe}%");
-      // }
-      if ($request->filled("kategori")) {
-          $getData->where("artikel_kategori", "like", "%{$request->kategori}%");
+      if ($request->filled("email")) {
+          $getData->where("komentar_email", "like", "%{$request->email}%");
       }
 
-      $getData->orderBy("artikel_id", $request->order[0]["dir"]);
+      if ($request->filled("isi")) {
+        $getData->where("komentar_isi", "like", "%{$request->isi}%");
+    }
+
+      $getData->orderBy("komentar_id", $request->order[0]["dir"]);
       $totalData =  $getData->count();
       $getData = $getData->get();
 
@@ -89,23 +83,18 @@ class ArtikelController extends Controller
       $i = 1;
       foreach ($getData as $key => $value) {
           $action = [];
-          $refId = $value->artikel_id;
+          $refId = $value->komentar_id;
           $isDelete = true;
           $isEdit = true;
           
-          if ($isEdit) {
-              $action['edit'] = route('artikel.edit', ['id' => $refId]);
-          }
           if ($isDelete) {
-              $action['delete'] = "mydata-url='" . route("artikel.delete", ['id' => $refId]) . "' mydata-isdelete='1' mydata-name='" . $value->artikel_judul . "' mydata-id='" . $refId . "'";
+              $action['delete'] = "mydata-url='" . route("komentar.delete", ['id' => $refId]) . "' mydata-isdelete='1' mydata-name='" . $value->komentar_email . "' mydata-id='" . $refId . "'";
           }
           
-          $foto = "<img src='$value->artikel_foto' height='30px' width='30px' />" ;
           array_push($data, array(
               $i++,
-              $foto,
-              $value->artikel_judul,
-              $value->artikel_kategori,
+              $value->komentar_email,
+              $value->komentar_isi,
               $action
           ));
       }
@@ -122,7 +111,7 @@ class ArtikelController extends Controller
           'sColumns'             => '',
           'aaData'               => $data,
       ];
-      return response()->json($result);
+        return response()->json($result);
     }
 
     /**
@@ -133,26 +122,13 @@ class ArtikelController extends Controller
     public function store(Request $request)
     {
   		$this->validate($request,[
-  			'artikel_judul' => 'required',
-  			'artikel_kategori' => 'required',
+  			'name_input' => 'required',
   		]);
-        // dd($request->all());
-        DB::beginTransaction();
-        $input = $request->all();
-        $input['artikel_created_by'] = Auth::user()->karyawan_id;
-        if ($request->has('file')) {
-            $file = $request->file('file');
-            $path = '/uploads/artikel/';
-            $exe = $file->getClientOriginalExtension();
-            /* upload to direktori*/
-            Image::make($file)->save(public_path($path . 'artikel_foto.' . $exe), 70);
 
-            /*set value untuk nyimpan ke database*/
-            $input['artikel_foto'] = $path . 'artikel_foto.' . $exe;
-        }
-      // dd($input);
+      DB::beginTransaction();
+
       try {
-        Artikel::create($input);
+        // $data->save();
       } catch (\Exception $e) {
         DB::rollback();
         dd($e);
@@ -174,15 +150,15 @@ class ArtikelController extends Controller
         $data['module_title'] = $this->moduleTitle;
         $data['breadcrumb'] = [
             ['title' => $this->moduleParent,'url' => '#'],
-            ['title' => $this->moduleTitle,'url' => "artikel"],
+            ['title' => $this->moduleTitle,'url' => "komentar"],
             ['title' => '','url' => $this->moduleUrl."/show/".$id]
         ];
 
         $data['action_type'] = "lihat";
-        $data['getdata'] = route('artikel.single_data', $id);
-        $data['action'] = route('artikel.show', $id);
+        $data['getdata'] = route('komentar.single_data', $id);
+        $data['action'] = route('komentar.show', $id);
 
-        return view("artikel::show",$data);
+        return view("komentar::show",$data);
     }
 
     /**
@@ -197,25 +173,23 @@ class ArtikelController extends Controller
       $data['module_title'] = $this->moduleTitle;
       $data['breadcrumb'] = [
           ['title' => $this->moduleParent,'url' => '#'],
-          ['title' => $this->moduleTitle,'url' => "artikel"],
+          ['title' => $this->moduleTitle,'url' => "komentar"],
           ['title' => '','url' => $this->moduleUrl."/edit/".$id]
       ];
 
       $data['action_type'] = "edit";
-      $data['getdata'] = route('artikel.single_data', $id);
-      $data['action'] = route('artikel.update', $id);
-      $data['redirect'] = route("artikel.index");
-      $data['data'] = json_encode(['karyawan_nik' => app_generate_nik()]);
+      $data['getdata'] = route('komentar.single_data', $id);
+      $data['action'] = route('komentar.update', $id);
 
-      return view("artikel::artikel_form", $data);
+      return view("komentar::edit", $data);
     }
 
     public function get_single_data($id)
     {
-      $_data=Artikel::find($id)->toArray();
-      $data = (object) $_data;
-      AppResponse::set('success', 'get data');
-      return response()->json(AppResponse::response($data, 'artikel_foto'), AppResponse::getCode());
+        $data = DB::table('table')->where('column_id', $id)->first();
+        // $data = Model::find($id);
+
+        return response()->json($data, 200);
     }
 
     /**
@@ -227,27 +201,16 @@ class ArtikelController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request,[
-          'artikel_judul' => 'required',
-          'artikel_kategori' => 'required',
+          'name_input' => 'required',
         ]);
       
-        $input = $request->all();
-        $input['artikel_created_by'] = Auth::user()->karyawan_id;
-        if ($request->has('file')) {
-            $file = $request->file('file');
-            $path = '/uploads/artikel/';
-            $exe = $file->getClientOriginalExtension();
-            /* upload to direktori*/
-            Image::make($file)->save(public_path($path . 'artikel_foto.' . $exe), 70);
-  
-            /*set value untuk nyimpan ke database*/
-            $input['artikel_foto'] = $path . 'artikel_foto.' . $exe;
-        }
-
-        $find = Artikel::findOrFail($id);
+        $data = DB::table('table')->where('column_id', $id)->first();
+        // $data = Model::find($id);
+        
         DB::beginTransaction();
+
         try {
-          $find->update($input);
+          // $data->save();
         } catch (\Exception $e) {
           DB::rollback();
           dd($e);
@@ -266,13 +229,13 @@ class ArtikelController extends Controller
      */
     public function delete($id)
     {
-      $find = Artikel::findOrFail($id);
+      $find = Komentar::findOrFail($id);
       
-        if ($find->delete()) {
-            AppResponse::set('success', 'Berhasil Menghapus Data'); // ['success','error','failed']
-        } else {
-            AppResponse::set('error', ' Tidak Berhasil Menghapus Data'); // ['success','error','failed']
-        }
-        return response()->json(AppResponse::response(), AppResponse::getCode());
+      if ($find->delete()) {
+          AppResponse::set('success', 'Berhasil Menghapus Data'); // ['success','error','failed']
+      } else {
+          AppResponse::set('error', ' Tidak Berhasil Menghapus Data'); // ['success','error','failed']
+      }
+      return response()->json(AppResponse::response(), AppResponse::getCode());
     }
 }

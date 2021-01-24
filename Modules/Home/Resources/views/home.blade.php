@@ -91,10 +91,7 @@
                                                     <a class="nav-link tm-nav-link" href="{{ route('home.index') }}">Beranda <span class="sr-only">(current)</span></a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a class="nav-link tm-nav-link" href="{{ route('home.about') }}">About</a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link tm-nav-link" href="{{ route('home.contact') }}">Contact</a>
+                                                    <a class="nav-link tm-nav-link" href="{{ route('home.contact') }}">About</a>
                                                 </li>
                                                 <li class="nav-item">
                                                     <a class="nav-link tm-nav-link" href="{{ route('login') }}">Login</a>
@@ -167,7 +164,11 @@
                                 <?php } ?>
                         </div>
                         <!-- Catalog Paging Buttons -->
-                        {{ $data->links() }}
+                        <?php if(@$artikel == 'active'){;?>
+                            {{ $data->links() }}
+                        <?php } else { ?>
+                            {{ $data->appends(['mode' => 'galery'])->links() }}
+                        <?php }  ?>
                     </main>
     
                     <!-- Subscribe form and footer links -->

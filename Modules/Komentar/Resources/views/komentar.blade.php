@@ -2,7 +2,7 @@
 
 @section('app_title',env('APP_NAME'))
 
-@section('module_title','Anggrek')
+@section('module_title','Artikel')
 
 @section('container')
 <div class="kt-portlet kt-portlet--mobile" data-display="1" id="element" >
@@ -22,7 +22,7 @@
 					<a id="find" class="btn btn-default btn-outline-primary btn-sm" title="Search Data">Find</a>
 					<a class="btn btn-icon-only btn-default btn-outline-primary fullscreen la la-expand" data-original-title="" title="aktifkan mode tampilan layar penuh"></a>
 					<a class="btn btn-icon-only btn-default btn-outline-primary reload la la-rotate-right" data-original-title="" title="Reload Data"></a>
-					<a href="{{ route('artikel.create') }}" class="btn btn-brand btn-elevate btn-icon-sm la la-plus" >
+					<a href="{{ route('anggrek.create') }}" class="btn btn-brand btn-elevate btn-icon-sm la la-plus" >
 					</a>
 				</div>
 			</div>
@@ -36,8 +36,8 @@
 				<thead>
 					<tr>
 						<th>No</th>
-						<th>Foto</th>
-						<th>Nama</th>
+						<th>Email</th>
+						<th>Isi</th>
 						<th width=15% >Actions</th>
 					</tr>
 					
@@ -58,13 +58,14 @@
                 App.blockUI();
             })
             // $.fn.dataTable.ext.errMode = 'none';
-			var url = "{{ route('anggrek.get') }}";
+			var url = "{{ route('komentar.get') }}";
 			var targetRender = {
 				'0':{'type' : '', 'orderable': false },
 				'-1':{'type' : 'actions','orderable': false}
 			};
 			var filter = {
-				'Nama':{'name':'nama','type':'text','id':'nama'},
+				'Email':{'name':'email','type':'text','id':'email'},
+				'Isi':{'name':'isi','type':'text','id':'isi'},
 			};
 			// var order   = [[0, "asc"]];
 			CoreDataTables.init(url,targetRender,filter,null);

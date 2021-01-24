@@ -84,8 +84,8 @@ https://templatemo.com/tm-552-video-catalog
 					</div>					
 				</div>
 
-				<div class="parallax-window" data-parallax="scroll" data-image-src="pictures/about-2.jpg"></div>
-
+				{{-- <div class="parallax-window" data-parallax="scroll" data-image-src="pictures/about-2.jpg"></div> --}}
+{{-- 
 				<div class="mx-auto tm-content-container mt-4 px-3">
 					<div class="row tm-catalog-item-list mb-4">
 		                <div class="col-lg-4 col-md-6 col-sm-12 tm-catalog-item">
@@ -131,13 +131,13 @@ https://templatemo.com/tm-552-video-catalog
 		                    </div>	
 		                </div>
 		            </div>
-				</div>
+				</div> --}}
 
 				<div class="parallax-window" data-parallax="scroll" data-image-src="pictures/about-3.jpg"></div>
 			</div>
 		</main>
 
-		<div class="container-fluid tm-content-container mx-auto pt-5">
+		{{-- <div class="container-fluid tm-content-container mx-auto pt-5">
 			<!-- Subscribe form and footer links -->
             <div class="row mt-5 pt-3">
                 <div class="col-xl-6 col-lg-12 mb-4">
@@ -184,7 +184,7 @@ https://templatemo.com/tm-552-video-catalog
                         - Designed by <a href="https://templatemo.com" rel="nofollow" target="_parent">TemplateMo</a></p>
                 </div>
             </footer>
-		</div>		
+		</div>		 --}}
 	</div>
 
 	<script src="js/jquery-3.4.1.min.js"></script>

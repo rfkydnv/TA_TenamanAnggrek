@@ -86,7 +86,6 @@ class AnggrekController extends Controller
           $isDelete = true;
           $isEdit = true;
           
-          $action['view'] = route('anggrek.show', ['id' => $refId]);
           if ($isEdit) {
               $action['edit'] = route('anggrek.edit', ['id' => $refId]);
           }
